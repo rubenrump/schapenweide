@@ -1,73 +1,177 @@
-import React from 'react';
+// src/App.js
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link, NavLink } from 'react-router-dom';
 import { Kenmerken, Omgeving, Algemeen } from './pages';
 import ContactPage from './pages/ContactPage';
-import { Phone } from 'lucide-react';
-import { LanguageProvider } from './pages/Navigation';
+import { Phone, Menu, X } from 'lucide-react';
+import { LanguageProvider, LanguageSwitcher } from './pages/Navigation';
 import ImageGallery from './components/ImageGallery';
 
-// Navigation Component
-const Navbar = () => (
-  <nav className="fixed top-0 left-0 right-0 bg-white shadow-lg z-50">
-    <div className="max-w-7xl mx-auto px-4">
-      <div className="flex justify-between items-center h-16">
-        <div className="flex items-center">
-          <Link to="/" className="text-2xl font-bold">
-            Schapenweide 5
-          </Link>
-        </div>
-        <div className="hidden md:flex space-x-8">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `transition-colors ${isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'}`
-            }
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/algemeen"
-            className={({ isActive }) =>
-              `transition-colors ${isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'}`
-            }
-          >
-            Algemeen
-          </NavLink>
-          <NavLink
-            to="/kenmerken"
-            className={({ isActive }) =>
-              `transition-colors ${isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'}`
-            }
-          >
-            Kenmerken
-          </NavLink>
-          <NavLink
-            to="/omgeving"
-            className={({ isActive }) =>
-              `transition-colors ${isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'}`
-            }
-          >
-            Omgeving
-          </NavLink>
-          <NavLink
-            to="/contact"
-            className={({ isActive }) =>
-              `transition-colors ${isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'}`
-            }
-          >
-            Contact
-          </NavLink>
-        </div>
-        <div className="flex items-center">
-          <a href="tel:0228592253" className="flex items-center space-x-2">
-            <Phone className="h-5 w-5" />
-            <span>(0228) 59 22 53</span>
-          </a>
+// Navbar Component
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false); // State voor menu
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
+  return (
+    <nav className="fixed top-0 left-0 right-0 bg-white shadow-lg z-50">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex items-center">
+            <Link to="/" className="text-2xl font-bold">
+              Schapenweide 5
+            </Link>
+          </div>
+          {/* Desktop Menu */}
+          <div className="hidden md:flex space-x-8 items-center">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `transition-colors ${
+                  isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'
+                }`
+              }
+            >
+              Home
+            </NavLink>
+            <NavLink
+              to="/algemeen"
+              className={({ isActive }) =>
+                `transition-colors ${
+                  isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'
+                }`
+              }
+            >
+              Algemeen
+            </NavLink>
+            <NavLink
+              to="/kenmerken"
+              className={({ isActive }) =>
+                `transition-colors ${
+                  isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'
+                }`
+              }
+            >
+              Kenmerken
+            </NavLink>
+            <NavLink
+              to="/omgeving"
+              className={({ isActive }) =>
+                `transition-colors ${
+                  isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'
+                }`
+              }
+            >
+              Omgeving
+            </NavLink>
+            <NavLink
+              to="/contact"
+              className={({ isActive }) =>
+                `transition-colors ${
+                  isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'
+                }`
+              }
+            >
+              Contact
+            </NavLink>
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+          </div>
+          {/* Hamburger Menu Icon voor Mobiel */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={toggleMenu}
+              className="text-gray-600 hover:text-gray-900 focus:outline-none"
+              aria-label={isOpen ? 'Sluit menu' : 'Open menu'}
+              aria-expanded={isOpen}
+            >
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
+          {/* Telefoonnummer */}
+          <div className="flex items-center">
+            <a href="tel:0228592253" className="flex items-center space-x-2">
+              <Phone className="h-5 w-5" />
+              <span>(0228) 59 22 53</span>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-  </nav>
-);
+      {/* Mobiel Menu */}
+      {isOpen && (
+        <div className="md:hidden bg-white shadow-lg">
+          <div className="px-4 pt-2 pb-4 space-y-1">
+            <NavLink
+              to="/"
+              onClick={closeMenu}
+              className={({ isActive }) =>
+                `block px-3 py-2 rounded-md text-base font-medium ${
+                  isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'
+                }`
+              }
+            >
+              Home
+            </NavLink>
+            <NavLink
+              to="/algemeen"
+              onClick={closeMenu}
+              className={({ isActive }) =>
+                `block px-3 py-2 rounded-md text-base font-medium ${
+                  isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'
+                }`
+              }
+            >
+              Algemeen
+            </NavLink>
+            <NavLink
+              to="/kenmerken"
+              onClick={closeMenu}
+              className={({ isActive }) =>
+                `block px-3 py-2 rounded-md text-base font-medium ${
+                  isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'
+                }`
+              }
+            >
+              Kenmerken
+            </NavLink>
+            <NavLink
+              to="/omgeving"
+              onClick={closeMenu}
+              className={({ isActive }) =>
+                `block px-3 py-2 rounded-md text-base font-medium ${
+                  isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'
+                }`
+              }
+            >
+              Omgeving
+            </NavLink>
+            <NavLink
+              to="/contact"
+              onClick={closeMenu}
+              className={({ isActive }) =>
+                `block px-3 py-2 rounded-md text-base font-medium ${
+                  isActive ? 'text-gray-900 font-semibold' : 'text-gray-600 hover:text-gray-900'
+                }`
+              }
+            >
+              Contact
+            </NavLink>
+            {/* Language Switcher in Mobiel Menu */}
+            <div className="flex space-x-2 mt-4">
+              <LanguageSwitcher />
+            </div>
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+};
 
 // Home Page
 const HomePage = () => (
